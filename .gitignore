@@ -3,7 +3,6 @@
 ### Eclipse ###
 
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak
@@ -129,3 +128,5 @@ fabric.properties
 
 .idea/
 /*/*.iml
+/*/bin/*
+!srv.policy
