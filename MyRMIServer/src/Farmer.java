@@ -2,6 +2,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.stream.Stream;
 
 class Farmer {
     private final String[] addresses;
@@ -10,17 +11,24 @@ class Farmer {
         this.addresses = addresses;
     }
 
-    void start() throws RemoteException, MalformedURLException, NotBoundException {
-        int n = 0;
-        double sum = 0;
-        for (String address : addresses) {
+    void start() {
+        long start = System.currentTimeMillis();
+        double sum = Stream.of(addresses).parallel().mapToDouble(this::calculate).sum();
+        System.out.println("Result = " + sum * 4);
+        long end = System.currentTimeMillis();
+        System.out.println(end - start + " ms");
+    }
+
+    private double calculate(String address) {
+        try {
             Worker worker = remoteWorker(address);
+            int n = worker.getId();
             Task task = new TaskImpl(n);
             ResultType result = calculateWith(worker, task);
-            sum += result.getResult();
-            ++n;
+            return result.getResult();
+        } catch (Exception e) {
+            throw new RuntimeException("Error during using worker", e);
         }
-        System.out.println("Result = " + sum * 4);
     }
 
     private static Worker remoteWorker(String address) throws RemoteException, NotBoundException, MalformedURLException {
