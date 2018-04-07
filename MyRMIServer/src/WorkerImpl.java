@@ -7,7 +7,7 @@ public class WorkerImpl extends UnicastRemoteObject implements Worker {
     }
 
     @Override
-    public int calculate(Task task) {
+    public ResultType calculate(Task task) {
         return task.calculate();
     }
 }

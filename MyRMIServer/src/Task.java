@@ -1,5 +1,5 @@
-public class Task {
-    int calculate() {
-        return 1;
-    }
+import java.io.Serializable;
+
+public interface Task extends Serializable {
+    ResultType calculate();
 }
