@@ -7,6 +7,6 @@ public class Main {
         int numberOfWorkers = new ArgsParser(args).numberOfWorkers();
         String[] addresses = new AddressesMaker(numberOfWorkers).prepareAddresses();
         new WorkerStarter(addresses).startWorkers();
-        new Farmer(addresses).startFarmer();
+        new Farmer(addresses).start();
     }
 }
