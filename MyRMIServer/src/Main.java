@@ -7,13 +7,13 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
-        startWorkers();
-        startFarmer();
+        String[] addresses = {"//localhost/a", "//localhost/b"};
+        startWorkers(addresses);
+        startFarmer(addresses);
     }
 
-    private static void startWorkers() throws RemoteException, MalformedURLException {
+    private static void startWorkers(String[] addresses) throws RemoteException, MalformedURLException {
         LocateRegistry.createRegistry(1099);
-        String[] addresses = {"//localhost/a", "//localhost/b"};
         for (String address : addresses) {
             try {
                 Worker worker = new WorkerImpl();
@@ -26,11 +26,10 @@ public class Main {
         }
     }
 
-    private static void startFarmer() throws RemoteException, MalformedURLException, NotBoundException {
-        String[] addresses = {"//localhost/a", "//localhost/b"};
+    private static void startFarmer(String[] addresses) throws RemoteException, MalformedURLException, NotBoundException {
         for (String address : addresses) {
             Task task = new TaskImpl(new Random().nextInt());
-            Worker worker = remoteObject(address);
+            Worker worker = remoteWorker(address);
             ResultType result;
             try {
                 result = worker.calculate(task);
@@ -42,11 +41,11 @@ public class Main {
         }
     }
 
-    private static <T> T remoteObject(String address) throws RemoteException, NotBoundException, MalformedURLException {
+    private static Worker remoteWorker(String address) throws RemoteException, NotBoundException, MalformedURLException {
         try {
-            T object = (T) Naming.lookup(address);
+            Worker worker = (Worker) Naming.lookup(address);
             System.out.println("Reference to " + address + " is got.");
-            return object;
+            return worker;
         } catch (Exception e) {
             System.out.println("Cannot get reference to " + address);
             throw e;
