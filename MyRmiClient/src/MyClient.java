@@ -9,9 +9,9 @@ public class MyClient {
         checkArgs(args);
         String address1 = args[0];
         String address2 = args[1];
-        InputType input = new InputType("add", 6.6, 3.3);
         CalcObject remoteObject1 = remoteObject(address1);
         CalcObject2 remoteObject2 = remoteObject(address2);
+        InputType input = new InputType("add", 6.6, 3.3);
         double result1;
         ResultType result2;
         try {
