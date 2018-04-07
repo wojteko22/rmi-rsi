@@ -6,24 +6,23 @@ public class CalcObjImpl2 extends UnicastRemoteObject implements CalcObject2 {
         super();
     }
 
+    @Override
     public ResultType calculate(InputType inParam) {
-        double zm1, zm2;
-        ResultType wynik = new ResultType();
-        zm1 = inParam.getx1();
-        zm2 = inParam.getx2();
-        wynik.result_description = "Operacja " + inParam.operation;
-        switch (inParam.operation) {
+        double x1 = inParam.getX1();
+        double x2 = inParam.getX2();
+        String operation = inParam.getOperation();
+        double result = 0;
+        String description = "Operation " + operation;
+        switch (operation) {
             case "add":
-                wynik.result = zm1 + zm2;
+                result = x1 + x2;
                 break;
             case "sub":
-                wynik.result = zm1 - zm2;
+                result = x1 - x2;
                 break;
             default:
-                wynik.result = 0;
-                wynik.result_description = "Podano zla operacje";
-                return wynik;
+                description = "Wrong operation";
         }
-        return wynik;
+        return new ResultType(result, description);
     }
 }

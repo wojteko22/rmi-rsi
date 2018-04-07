@@ -2,8 +2,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class CalcObjImpl extends UnicastRemoteObject implements CalcObject {
-    private static final long serialVersionUID = 101L;
-
     CalcObjImpl() throws RemoteException {
         super();
     }

@@ -1,7 +1,12 @@
 import java.io.Serializable;
 
-public class ResultType implements Serializable {
+class ResultType implements Serializable {
     private static final long serialVersionUID = 102L;
-    String result_description;
-    double result;
+    private double result;
+    private String result_description;
+
+    ResultType(double result, String result_description) {
+        this.result = result;
+        this.result_description = result_description;
+    }
 }

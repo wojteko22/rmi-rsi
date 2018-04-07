@@ -1,29 +1,28 @@
+import java.net.MalformedURLException;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 public class MyServer {
-    public static void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("You have to enter two RMI object addresses in the form: //host_address/service_name");
-            return;
-        }
+    public static void main(String[] args) throws RemoteException, MalformedURLException {
+        checkArgs(args);
+        LocateRegistry.createRegistry(1099);
         try {
-            LocateRegistry.createRegistry(1099);
-        } catch (RemoteException e1) {
-            e1.printStackTrace();
-        }
-        if (System.getSecurityManager() == null)
-            System.setSecurityManager(new SecurityManager());
-        try {
-            CalcObjImpl implObiektu = new CalcObjImpl();
-            java.rmi.Naming.rebind(args[0], implObiektu);
-            CalcObjImpl2 implObiektu2 = new CalcObjImpl2();
-            java.rmi.Naming.rebind(args[1], implObiektu2);
+            CalcObject object1 = new CalcObjImpl();
+            Naming.rebind(args[0], object1);
+            CalcObject2 object2 = new CalcObjImpl2();
+            Naming.rebind(args[1], object2);
             System.out.println("Server is registered now :-)");
-            System.out.println("Press Crl+C to stop...");
         } catch (Exception e) {
             System.out.println("SERVER CAN'T BE REGISTERED!");
-            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    private static void checkArgs(String[] args) {
+        if (args.length != 2) {
+            throw new IllegalArgumentException(
+                    "You have to enter two RMI object addresses in the form: //host_address/service_name ");
         }
     }
 }

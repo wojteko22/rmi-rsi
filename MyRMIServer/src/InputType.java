@@ -1,16 +1,20 @@
 import java.io.Serializable;
 
-public class InputType implements Serializable {
+class InputType implements Serializable {
     private static final long serialVersionUID = 101L;
-    String operation;
-    double x1;
-    double x2;
+    private String operation;
+    private double x1;
+    private double x2;
 
-    public double getx1() {
+    String getOperation() {
+        return operation;
+    }
+
+    double getX1() {
         return x1;
     }
 
-    public double getx2() {
+    double getX2() {
         return x2;
     }
 }
