@@ -7,9 +7,38 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
-        String[] addresses = {"//localhost/a", "//localhost/b"};
+        int numberOfWorkers = numberOfWorkers(args);
+        String[] addresses = prepareAddresses(numberOfWorkers);
         startWorkers(addresses);
         startFarmer(addresses);
+    }
+
+    private static int numberOfWorkers(String[] args) {
+        if (args.length != 0) {
+            return parseArgs(args);
+        } else {
+            return 4;
+        }
+    }
+
+    private static int parseArgs(String[] args) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("You can specify only one number of workers");
+        } else {
+            int value = Integer.parseInt(args[0]);
+            if (value < 4) {
+                throw new IllegalArgumentException("Number of workers cannot be less than 4");
+            }
+            return value;
+        }
+    }
+
+    private static String[] prepareAddresses(int count) {
+        String[] array = new String[count];
+        for (int i = 0; i < count; i++) {
+            array[i] = "//localhost/" + i;
+        }
+        return array;
     }
 
     private static void startWorkers(String[] addresses) throws RemoteException, MalformedURLException {
