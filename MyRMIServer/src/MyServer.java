@@ -12,6 +12,8 @@ public class MyServer {
             Naming.rebind(args[0], object1);
             CalcObject2 object2 = new CalcObjImpl2();
             Naming.rebind(args[1], object2);
+            Worker worker = new WorkerImpl();
+            Naming.rebind(args[2], worker);
             System.out.println("Server is registered now :-)");
         } catch (Exception e) {
             System.out.println("SERVER CAN'T BE REGISTERED!");
@@ -20,9 +22,9 @@ public class MyServer {
     }
 
     private static void checkArgs(String[] args) {
-        if (args.length != 2) {
+        if (args.length != 3) {
             throw new IllegalArgumentException(
-                    "You have to enter two RMI object addresses in the form: //host_address/service_name ");
+                    "You have to enter three RMI object addresses in the form: //host_address/service_name ");
         }
     }
 }
