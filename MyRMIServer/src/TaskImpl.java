@@ -7,7 +7,14 @@ public class TaskImpl implements Task {
 
     @Override
     public ResultType calculate() {
-        double result = 1.0 / (4 * n + 1) - 1.0 / (4 * n + 3);
-        return new ResultType(result);
+        int multiplier = 1000000;
+        int start = multiplier * n;
+        double sum = 0.0;
+        int i = start;
+        while(i < start + multiplier) {
+            sum += 1.0 / (4 * i + 1) - 1.0 / (4 * i + 3);
+            i++;
+        }
+        return new ResultType(sum);
     }
 }

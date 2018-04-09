@@ -3,6 +3,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,17 +15,41 @@ class Farmer {
     }
 
     void start() {
+        boolean sequentiallyMode = sequentiallyMode();
         long start = System.currentTimeMillis();
-        List<ResultType> list = Stream.of(addresses).parallel().map(this::calculate).collect(Collectors.toList());
+        List<ResultType> list = getResults(sequentiallyMode);
+        long end = System.currentTimeMillis();
         double pi = list.stream().mapToDouble(ResultType::getResult).sum() * 4;
         double average = list.stream()
                 .mapToLong(ResultType::getTime).average()
                 .orElseThrow(() -> new RuntimeException("Something went wrogn"));
-        long end = System.currentTimeMillis();
         long time = end - start;
         System.out.println("PI: " + pi);
         System.out.println("Average worker time: " + average);
         System.out.println("Time on farmer: " + time + " ms");
+    }
+
+    private List<ResultType> getResults(boolean sequentiallyMode) {
+        if (sequentiallyMode) {
+            return getResultsSeqentially();
+        }
+        return getResultsParallely();
+    }
+
+    private List<ResultType> getResultsSeqentially() {
+        return Stream.of(addresses).map(this::calculate).collect(Collectors.toList());
+    }
+
+    private List<ResultType> getResultsParallely() {
+        return Stream.of(addresses).parallel().map(this::calculate).collect(Collectors.toList());
+    }
+
+    private boolean sequentiallyMode() {
+        System.out.println("sequentially (s) or parallel (p)?");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.next();
+        char firstChar = input.charAt(0);
+        return firstChar == 's' || firstChar == 'S';
     }
 
     private ResultType calculate(String address) {
