@@ -25,6 +25,8 @@ class Farmer {
             int n = worker.getId();
             Task task = new TaskImpl(n);
             ResultType result = calculateWith(worker, task);
+            Long time = result.getTime();
+            System.out.println(address + ": " + time + " ms");
             return result.getResult();
         } catch (Exception e) {
             throw new RuntimeException("Error during using worker", e);
